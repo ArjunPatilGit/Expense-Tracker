@@ -2,21 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Expense Tracker</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <h1>Expense Tracker</h1>
-
     <div class="balance">
       <h3>Remaining Balance: ₹<span id="balance">0</span></h3>
     </div>
 
     <form id="transactionForm">
       <input type="text" id="desc" placeholder="Description" required />
-      <input type="number" id="amount" placeholder="Amount (use - for expense)" required />
+      <input type="number" id="amount" placeholder="Amount" required />
+      
+      <!-- Dropdown for Credit -->
+      <select id="creditDropdown">
+        <option value="">Credit</option>
+        <option value="credit">Credit</option>
+      </select>
+
+      <!-- Dropdown for Debit -->
+      <select id="debitDropdown">
+        <option value="">Debit</option>
+        <option value="debit">Debit</option>
+      </select>
+      
       <input type="date" id="date" required />
       <select id="category" required>
         <option value="">Select Category</option>
