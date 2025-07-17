@@ -14,7 +14,11 @@ const printBtn = document.getElementById("printBtn");
 window.onload = () => {
   const savedData = JSON.parse(localStorage.getItem("transactions"));
   if (savedData) {
-    transactions = savedData;
+    // Ensure amounts are numbers
+    transactions = savedData.map(t => ({
+      ...t,
+      amt: parseFloat(t.amt)
+    }));
     updateUI();
   }
 };
@@ -128,7 +132,7 @@ printBtn.addEventListener("click", () => {
     <h1>Expense Summary</h1>`;
 
   for (const month in grouped) {
-    html += <h2>${month}</h2>;
+    html += `<h2>${month}</h2>`;
     html += `
       <table>
         <thead>
@@ -151,10 +155,10 @@ printBtn.addEventListener("click", () => {
         </tr>`;
     });
 
-    html += </tbody></table>;
+    html += `</tbody></table>`;
   }
 
-  html += </body></html>;
+  html += `</body></html>`;
 
   const printWindow = window.open('', '', 'width=800,height=600');
   printWindow.document.write(html);
