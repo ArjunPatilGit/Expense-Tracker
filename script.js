@@ -4,8 +4,6 @@ const balanceDisplay = document.getElementById("balance");
 const transactionForm = document.getElementById("transactionForm");
 const descInput = document.getElementById("desc");
 const amountInput = document.getElementById("amount");
-const creditDropdown = document.getElementById("creditDropdown");
-const debitDropdown = document.getElementById("debitDropdown");
 const dateInput = document.getElementById("date");
 const categoryInput = document.getElementById("category");
 const transactionList = document.getElementById("transactionList");
@@ -18,6 +16,7 @@ window.onload = () => {
   if (savedData) {
     transactions = savedData;
     updateUI();
+  }
 };
 
 // Add transaction
@@ -25,27 +24,17 @@ transactionForm.addEventListener("submit", function (e) {
   e.preventDefault();
 
   const desc = descInput.value.trim();
-  const amount = parseFloat(amountInput.value);
+  const amt = parseFloat(amountInput.value);
   const date = dateInput.value;
   const category = categoryInput.value;
-  const creditSelected = creditDropdown.value === 'credit';
-  const debitSelected = debitDropdown.value === 'debit';
 
-  if (!desc || isNaN(amount) || !date || !category || (!creditSelected && !debitSelected)) return;
-
-  let transactionAmount = 0;
-  if (creditSelected) {
-    transactionAmount = amount;
-  } else if (debitSelected) {
-    transactionAmount = -amount;
-  }
+  if (!desc || isNaN(amt) || !date || !category) return;
 
   const newTransaction = {
     desc,
-    amount: transactionAmount,
+    amt,
     date,
-    category,
-    type: creditSelected ? "Credit" : "Debit"
+    category
   };
 
   transactions.push(newTransaction);
@@ -62,7 +51,7 @@ resetBtn.addEventListener("click", () => {
   }
 });
 
-// Save and Update function
+// Save and Update
 function saveAndRender() {
   localStorage.setItem("transactions", JSON.stringify(transactions));
   updateUI();
@@ -77,11 +66,10 @@ function updateUI() {
     const li = document.createElement("li");
     li.innerHTML = `
       <strong>${t.desc}</strong><br/>
-      ₹${t.amount.toFixed(2)} | ${t.type} | ${t.category} | ${t.date}
+      ₹${t.amt.toFixed(2)} | ${t.category} | ${t.date}
     `;
     transactionList.appendChild(li);
-
-    balance += t.amount;
+    balance += t.amt;
   });
 
   balanceDisplay.textContent = balance.toFixed(2);
@@ -98,49 +86,49 @@ printBtn.addEventListener("click", () => {
   });
 
   let html = `
-    <html>
-      <head>
-        <title>Expense Summary</title>
-        <style>
-          body {
-            font-family: 'Segoe UI', sans-serif;
-            padding: 40px;
-            color: #333;
-          }
-          h1 {
-            text-align: center;
-            margin-bottom: 40px;
-          }
-          h2 {
-            background: #4a90e2;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 40px;
-          }
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-          }
-          th, td {
-            padding: 12px;
-            border: 1px solid #ccc;
-            text-align: left;
-          }
-          th {
-            background: #f2f2f2;
-          }
-          tr:nth-child(even) {
-            background-color: #fafafa;
-          }
-        </style>
-      </head>
-      <body>
-        <h1>Expense Summary</h1>`;
+  <html>
+  <head>
+    <title>Expense Summary</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        padding: 40px;
+        color: #333;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      h2 {
+        background: #4a90e2;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 40px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+      th, td {
+        padding: 12px;
+        border: 1px solid #ccc;
+        text-align: left;
+      }
+      th {
+        background: #f2f2f2;
+      }
+      tr:nth-child(even) {
+        background-color: #fafafa;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Expense Summary</h1>`;
 
   for (const month in grouped) {
-    html += `<h2>${month}</h2>`;
+    html += <h2>${month}</h2>;
     html += `
       <table>
         <thead>
@@ -149,26 +137,24 @@ printBtn.addEventListener("click", () => {
             <th>Description</th>
             <th>Category</th>
             <th>Amount (₹)</th>
-            <th>Type</th>
           </tr>
         </thead>
-        <tbody>`;
-    
+        <tbody>
+    `;
     grouped[month].forEach(t => {
       html += `
         <tr>
           <td>${t.date}</td>
           <td>${t.desc}</td>
           <td>${t.category}</td>
-          <td>${t.amount.toFixed(2)}</td>
-          <td>${t.type}</td>
+          <td>${t.amt.toFixed(2)}</td>
         </tr>`;
     });
 
-    html += `</tbody></table>`;
+    html += </tbody></table>;
   }
 
-  html += `</body></html>`;
+  html += </body></html>;
 
   const printWindow = window.open('', '', 'width=800,height=600');
   printWindow.document.write(html);
