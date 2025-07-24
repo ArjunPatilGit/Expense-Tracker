@@ -1,49 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Expense Tracker</title>
-    <link rel="stylesheet" href="style.css" />
-    <!-- Add Google API JS SDK -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Expense Tracker</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Expense Tracker</h1>
 
-      <!-- Google Sign-In Button -->
-      <div id="gSignIn"></div>
-
-      <div class="balance">
-        <h3>Remaining Balance: ₹<span id="balance">0</span></h3>
-      </div>
-
-      <form id="transactionForm">
-        <input type="text" id="desc" placeholder="Description" required />
-        <input type="number" id="amount" placeholder="Amount (use - for expense)" required />
-        <input type="date" id="date" required />
-        <select id="category" required>
-          <option value="">Select Category</option>
-          <option>Food</option>
-          <option>Transport</option>
-          <option>Shopping</option>
-          <option>Entertainment</option>
-          <option>Salary</option>
-          <option>Others</option>
-        </select>
-        <button type="submit">Add Transaction</button>
-      </form>
-
-      <h3>Transactions:</h3>
-      <ul id="transactionList"></ul>
-
-      <div class="buttons">
-        <button id="resetBtn">Reset Data</button>
-        <button id="printBtn">Export / Print Summary</button>
-      </div>
+    <div class="balance">
+      <h3>Remaining Balance: ₹<span id="balance">0</span></h3>
     </div>
 
-    <script src="script.js"></script>
-  </body>
+    <form id="transactionForm">
+      <input type="text" id="desc" placeholder="Description" required />
+      <input type="number" id="amount" placeholder="Amount (use - for expense)" required />
+      <input type="date" id="date" required />
+      <select id="category" required>
+        <option value="">Select Category</option>
+        <option>Food</option>
+        <option>Transport</option>
+        <option>Shopping</option>
+        <option>Entertainment</option>
+        <option>Salary</option>
+        <option>Others</option>
+      </select>
+      <button type="submit">Add Transaction</button>
+    </form>
+
+    <h3>Transactions:</h3>
+    <ul id="transactionList"></ul>
+
+    <div class="buttons">
+      <button id="resetBtn">Reset Data</button>
+      <button id="printBtn">Export / Print Summary</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
 </html>
