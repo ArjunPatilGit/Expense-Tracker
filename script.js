@@ -12,9 +12,9 @@ const printBtn = document.getElementById("printBtn");
 
 // Load from localStorage
 window.onload = () => {
-  const savedData = JSON.parse(localStorage.getItem("transactions"));
-  if (savedData) {
-    transactions = savedData;
+  const saved = JSON.parse(localStorage.getItem("transactions"));
+  if (saved) {
+    transactions = saved;
     updateUI();
   }
 };
@@ -30,20 +30,13 @@ transactionForm.addEventListener("submit", function (e) {
 
   if (!desc || isNaN(amt) || !date || !category) return;
 
-  const newTransaction = {
-    desc,
-    amt,
-    date,
-    category
-  };
-
+  const newTransaction = { desc, amt, date, category };
   transactions.push(newTransaction);
   saveAndRender();
-
   transactionForm.reset();
 });
 
-// Reset Data
+// Reset
 resetBtn.addEventListener("click", () => {
   if (confirm("Clear all data?")) {
     transactions = [];
@@ -51,13 +44,13 @@ resetBtn.addEventListener("click", () => {
   }
 });
 
-// Save and Update
+// Save + render
 function saveAndRender() {
   localStorage.setItem("transactions", JSON.stringify(transactions));
   updateUI();
 }
 
-// Render Transactions
+// Update UI
 function updateUI() {
   transactionList.innerHTML = "";
   let balance = 0;
@@ -75,7 +68,7 @@ function updateUI() {
   balanceDisplay.textContent = balance.toFixed(2);
 }
 
-// Print Summary
+// Export Summary
 printBtn.addEventListener("click", () => {
   const grouped = {};
 
@@ -84,3 +77,55 @@ printBtn.addEventListener("click", () => {
     if (!grouped[month]) grouped[month] = [];
     grouped[month].push(t);
   });
+
+  let html = `
+    <html>
+    <head>
+      <title>Expense Summary</title>
+      <style>
+        body { font-family: sans-serif; padding: 40px; color: #333; }
+        h1 { text-align: center; margin-bottom: 40px; }
+        h2 { background: #4a90e2; color: white; padding: 10px; border-radius: 5px; margin-top: 40px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; border: 1px solid #ccc; text-align: left; }
+        th { background: #f2f2f2; }
+        tr:nth-child(even) { background-color: #fafafa; }
+      </style>
+    </head>
+    <body>
+      <h1>Expense Summary</h1>
+  `;
+
+  for (const month in grouped) {
+    html += `<h2>${month}</h2>`;
+    html += `
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Amount (₹)</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+    grouped[month].forEach(t => {
+      html += `
+        <tr>
+          <td>${t.date}</td>
+          <td>${t.desc}</td>
+          <td>${t.category}</td>
+          <td>${t.amt.toFixed(2)}</td>
+        </tr>`;
+    });
+    html += `</tbody></table>`;
+  }
+
+  html += `</body></html>`;
+
+  const printWindow = window.open('', '', 'width=800,height=600');
+  printWindow.document.write(html);
+  printWindow.document.close();
+  printWindow.print();
+});
