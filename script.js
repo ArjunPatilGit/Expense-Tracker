@@ -1,5 +1,6 @@
 let transactions = [];
 
+
 const balanceDisplay = document.getElementById("balance");
 const transactionForm = document.getElementById("transactionForm");
 const descInput = document.getElementById("desc");
